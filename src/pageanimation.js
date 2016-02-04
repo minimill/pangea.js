@@ -26,38 +26,6 @@
   }
 
   /**
-   * Scroll to the top of the page, for scrollDuration ms, calling cb when done.
-   *
-   * @param {int} offset - the offset from the top of the document to scroll to
-   * @param {int} scrollDuration - how long the scroll should take, in ms
-   * @param {function} cb - callback to call when the scroll is complete
-   */
-  function _scrollTo(offset, scrollDuration, cb) {
-    var scrollHeight = window.scrollY;
-    var scrollStep = Math.PI / (scrollDuration / 15);
-    var cosParameter = (scrollHeight - offset) / 2;
-    var scrollCount = 0;
-    var cosArgument;
-    var scrollMargin;
-    requestAnimationFrame(step);
-
-    function step() {
-      setTimeout(function() {
-        if (Math.abs(window.scrollY - offset) > 5) {
-          requestAnimationFrame(step);
-          scrollCount = scrollCount + 1;
-          cosArgument = Math.max(0, Math.min(Math.PI, scrollCount * scrollStep));
-          scrollMargin = cosParameter - cosParameter * Math.cos(cosArgument);
-          window.scrollTo(0, (scrollHeight - scrollMargin));
-        } else {
-          window.scrollTo(0, offset);
-          cb();
-        }
-      }, 15);
-    }
-  }
-
-  /**
    * Get the anchor tag that triggered the event being clicked.
    *
    * @param {Object} e - the click event
@@ -236,6 +204,39 @@
   };
 
   /**
+   * Scroll to the top of the page, for scrollDuration ms, calling cb when done.
+   *
+   * @param {int} offset - the offset from the top of the document to scroll to
+   * @param {int} scrollDuration - how long the scroll should take, in ms
+   * @param {function} cb - callback to call when the scroll is complete
+   */
+  PageAnimation.scrollTo = function(offset, scrollDuration, cb) {
+    cb = cb || function() {};
+    var scrollHeight = window.scrollY;
+    var scrollStep = Math.PI / (scrollDuration / 15);
+    var cosParameter = (scrollHeight - offset) / 2;
+    var scrollCount = 0;
+    var cosArgument;
+    var scrollMargin;
+    requestAnimationFrame(step);
+
+    function step() {
+      setTimeout(function() {
+        if (Math.abs(window.scrollY - offset) > 5) {
+          requestAnimationFrame(step);
+          scrollCount = scrollCount + 1;
+          cosArgument = Math.max(0, Math.min(Math.PI, scrollCount * scrollStep));
+          scrollMargin = cosParameter - cosParameter * Math.cos(cosArgument);
+          window.scrollTo(0, (scrollHeight - scrollMargin));
+        } else {
+          window.scrollTo(0, offset);
+          cb();
+        }
+      }, 15);
+    }
+  };
+
+  /**
    * Called when the animation is complete.
    *
    * @param {Object} e - the transition end event object.
@@ -257,7 +258,7 @@
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'after') {
-      _scrollTo(this.cb.computeScrollOffset(animation), 200, followLink);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200, followLink);
     } else {
       followLink();
     }
@@ -289,10 +290,10 @@
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'before') {
-      _scrollTo(this.cb.computeScrollOffset(animation), 200, startAnimation);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200, startAnimation);
     } else if (animation.shouldScroll && animation.scrollTiming === 'during') {
       setTimeout(startAnimation, 0);
-      _scrollTo(this.cb.computeScrollOffset(animation), 200);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200);
     } else {
       startAnimation();
     }
@@ -327,7 +328,6 @@
       }
     }
   };
-
 
   if (typeof define === 'function' && define.amd) {
     define(PageAnimation);
