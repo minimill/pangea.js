@@ -314,7 +314,7 @@
     // Only animate if we are not in another animation, we should animate, and
     // we're not just supposed to refresh the page.
     if (!this.currentAnimation &&
-        this.cb.shouldAnimate() &&
+        this.cb.shouldAnimate(anchor, path) &&
         (this.settings.animateLinksToSelf || this.path !== window.location.pathname)) {
       for (var urlRegex in this.animations) {
         if (this.animations.hasOwnProperty(urlRegex) && this.animations[urlRegex].regex.test(path)) {
