@@ -56,6 +56,18 @@
   }
 
   /**
+   * @param {Number} x - percent complete
+   * @param {Number} t - time elapsed
+   * @param {Number} b - start value
+   * @param {Number} c - end value
+   * @param {Number} d - duration
+   */
+  function _easeInOutQuad(x, t, b, c, d) {
+    if ((t /= d / 2) < 1) return c / 2 * t * t + b;
+    return -c / 2 * ((--t) * (t - 2) - 1) + b;
+  }
+
+  /**
    * The PageAnimation constructor
    *
    * @param {Object} options - Configuration options
@@ -68,6 +80,8 @@
    *     'during': scroll the page and start the animations at the same time
    *     'after': scroll once the animations are complete
    *   default: 'before'
+   * @param {int} options.scrollDuration - the defualt scroll speed in ms.
+   *   default: 200
    * @param {bool} options.animateLinksToSelf - whether or not links to the
    *   current page should be ignored.
    *   default: true
@@ -88,7 +102,8 @@
 
     this.defaults = {
       shouldScroll: options.shouldScroll || true,
-      scrollTiming: options.scrollTiming || 'before'
+      scrollTiming: options.scrollTiming || 'before',
+      scrollDuration: options.scrollDuration || 200,
     };
 
     this.settings = {
@@ -137,6 +152,8 @@
    *     'during': scroll the page and start the animations at the same time
    *     'after': scroll once the animations are complete
    *   default: the value of options.scrollTiming passed into PageAnimation()
+   * @param {Number} options.scrollDuration - the scroll speed in ms.
+   *   default: the value of options.scrollDuration passed into PageAnimation()
    *
    * @returns the new PageAnimation instance.
    */
@@ -145,12 +162,13 @@
     var opts = options || {};
     var animation = {
       anchor: null,
-      bodyClass: bodyClass,
+      bodyClass: ' ' + bodyClass + ' ',
       finalElement: document.getElementById(finalElementId),
       path: null,
       regex: new RegExp(urlRegex),
       shouldScroll: opts.shouldScroll || this.defaults.shouldScroll,
       scrollTiming: opts.scrollTiming || this.defaults.scrollTiming,
+      scrollDuration: opts.scrollDuration || this.defaults.scrollDuration,
     };
 
     // Error checking
@@ -212,29 +230,34 @@
    */
   PageAnimation.scrollTo = function(offset, scrollDuration, cb) {
     cb = cb || function() {};
-    var scrollHeight = window.scrollY;
-    var scrollStep = Math.PI / (scrollDuration / 15);
-    var cosParameter = (scrollHeight - offset) / 2;
-    var scrollCount = 0;
-    var cosArgument;
-    var scrollMargin;
-    requestAnimationFrame(step);
+    var startT = Date.now();
+    var startY = window.scrollY;
+    var distanceToTravel = offset - startY;
+    var percentComplete = 0;
+    var elapsed;
+    var scrollToPercent;
+    var scrollToY;
 
     function step() {
       setTimeout(function() {
-        if (Math.abs(window.scrollY - offset) > 5) {
+        if (percentComplete < 1) {
+          elapsed = Date.now() - startT;
+          percentComplete = elapsed / scrollDuration;
+          scrollToPercent = _easeInOutQuad(percentComplete, elapsed, 0, 1, scrollDuration);
+          scrollToY = scrollToPercent * distanceToTravel + startY;
+          console.log(percentComplete, elapsed, scrollToPercent, scrollToY, startY);
+          window.scrollTo(0, scrollToY);
           requestAnimationFrame(step);
-          scrollCount = scrollCount + 1;
-          cosArgument = Math.max(0, Math.min(Math.PI, scrollCount * scrollStep));
-          scrollMargin = cosParameter - cosParameter * Math.cos(cosArgument);
-          window.scrollTo(0, (scrollHeight - scrollMargin));
         } else {
           window.scrollTo(0, offset);
           cb();
         }
       }, 15);
     }
+
+    step();
   };
+
 
   /**
    * Called when the animation is complete.
@@ -258,7 +281,7 @@
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'after') {
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200, followLink);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, followLink);
     } else {
       followLink();
     }
@@ -286,14 +309,14 @@
 
     var startAnimation = function() {
       this.targetUrl = animation.path;
-      this.body.className = animation.bodyClass;
+      this.body.className += animation.bodyClass;
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'before') {
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200, startAnimation);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, startAnimation);
     } else if (animation.shouldScroll && animation.scrollTiming === 'during') {
       setTimeout(startAnimation, 0);
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), 200);
+      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration);
     } else {
       startAnimation();
     }
