@@ -33,15 +33,12 @@
    * @returns {Node} the anchor element
    */
   function _getTargetAnchor(e) {
-    var url;
-    if (e.target.href) {
-      return e.target;
-    } else {
-      for (var i = 0; i < e.path.length; i++) {
-        if (e.path[i].href) {
-          return e.path[i];
-        }
+    var target = e.target;
+    while (target.parentNode) {
+      if (target.href) {
+        return target;
       }
+      target = target.parentNode;
     }
   }
 
@@ -245,7 +242,6 @@
           percentComplete = elapsed / scrollDuration;
           scrollToPercent = _easeInOutQuad(percentComplete, elapsed, 0, 1, scrollDuration);
           scrollToY = scrollToPercent * distanceToTravel + startY;
-          console.log(percentComplete, elapsed, scrollToPercent, scrollToY, startY);
           window.scrollTo(0, scrollToY);
           requestAnimationFrame(step);
         } else {
