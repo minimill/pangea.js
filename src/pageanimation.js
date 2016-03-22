@@ -266,13 +266,23 @@
     }
 
     var animation = this.currentAnimation;
-    this.currentAnimation = null;
 
     var followLink = function() {
-      if (window.location.pathname === this.targetUrl) {
+
+      // Run this code after we've left the page. On most browsers, this code
+      // will never run, but for browsers that suspend sessions and return to
+      // them when you press back, this will undo the transformations we
+      // performed so that we're not left with a half-transformed page.
+      setTimeout(function() {
+        this.body.className = this.body.className.replace(animation.bodyClass, '');
+        animation.finalElement.removeEventListener(this.transitionEndEvent, this.boundOnTransitionEnd);
+        this.currentAnimation = null;
+      }.bind(this), 100);
+
+      if (window.location.pathname === animation.path) {
         window.location.reload();
       } else {
-        window.location = this.targetUrl;
+        window.location = animation.path;
       }
     }.bind(this);
 
@@ -304,7 +314,6 @@
     this.currentAnimation = animation;
 
     var startAnimation = function() {
-      this.targetUrl = animation.path;
       this.body.className += animation.bodyClass;
     }.bind(this);
 
