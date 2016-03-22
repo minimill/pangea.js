@@ -92,17 +92,23 @@ var pangea = new Pangea(opts)
 
 ##### `options`
 > **Type**: `Object`
+> 
 > **Default**: See below
+> 
 > **Description**: Configuration options.
 
 ##### `options.shouldScroll`
 > **Type**: `bool`
+> 
 > **Default**: true
+> 
 > **Description**: Whether or we should scroll the page as part of the animation.
 
 ##### `options.scrollTiming`
 > **Type**: `string`
+> 
 > **Default**: `"before"`
+> 
 > **Description**: The defualt scroll timing.  One of:
 > 
 > - `"before"`: scroll the page before starting animations
@@ -112,27 +118,36 @@ var pangea = new Pangea(opts)
 
 ##### `options.animateLinksToSelf`
 > **Type**: `bool`
+> 
 > **Default**: `true`
+> 
 > **Description**: Whether or not links to the current page should be ignored.
 
 ##### `options.computeScrollOffset`
 > **Type**: `function`
+> 
 > **Default**: `function() { return 0; }`
-**Description**: A function to compute the offset from the top of the page to > scroll to as a part of the animation.
+> **Description**: A function to compute the offset from the top of the page to scroll to as a part of the animation.
 
 ##### `options.shouldAnimate`
 > **Type**: `function`
+> 
 > **Default**: `function() { return true; }`
+> 
 > **Description**: A function to compute whether or not we should animate.
 
 ##### `options.beforeAnimationStart`
 > **Type**: `function`
+> 
 > **Default**: `function() {}`
+> 
 > **Description**: A function to run before the animation starts.
 
 ##### `options.onTransitionEnd`
 > **Type**: `function`
+> 
 > **Default**: `function() {}`
+> 
 > **Description**: A function to run once the animation is complete.
 
 ### register(_urlRegex_, _finalElementId_, _bodyClass_, [_options_])
@@ -142,29 +157,38 @@ Register a new animation on this page.
 
 #### `urlRegex`
 > **Type**: `string`
+> 
 > **Description**: The pattern to be passed to `new RegExp()` to match the URL paths that this animation should apply to.
 
 #### `finalElementId`
 > **Type**: `string`
+> 
 > **Description**: The ID of the element that is last to transition. We listen to the transitionEnd event on this element to know when to navigate to the next page.
 
 #### `bodyClass`
 > **Type**: `string`
+> 
 > **Description**: The class to apply to the body to start the animations.
 
 #### `options`
 > **Type**: `Object`
+> 
 > **Description**: Configuration options
 
 #### `options.shouldScroll`
 > **Type**: `bool`
+> 
 > **Defualt**: The value of `options.shouldScroll` passed into `Pangea()`.
+> 
 > **Description**: Whether or not we should scroll the page as part of this animation. 
 
 #### `options.scrollTiming`
 > **Type**: `bool`
+> 
 > **Default**: the value of `options.scrollTiming` passed into `Pangea()`.
+> 
 > **Description**: The scroll timing for this animation
+> 
 > **Options**:
 > 
 > - `"before"`: scroll the page before starting animations
@@ -176,6 +200,7 @@ Deregisters the animation for the passed `urlRegex`. Returns the Pangea instance
 
 #### `urlRegex`
 > **Type**: `string`
+> 
 > **Description** The same pattern that was passed into `Pangea.register()`.
 
 ### enable()
