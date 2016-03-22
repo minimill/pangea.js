@@ -65,7 +65,7 @@
   }
 
   /**
-   * The PageAnimation constructor
+   * The Pangea constructor
    *
    * @param {Object} options - Configuration options
    * @param {bool} options.shouldScroll - whether or we should scroll the page
@@ -93,7 +93,7 @@
    * @param {function} options.onTransitionEnd - a function to run once the
    *   animation is complete.
    */
-  function PageAnimation(options) {
+  function Pangea(options) {
 
     var opts = options || {};
 
@@ -142,19 +142,19 @@
    * @param {Object} options - Configuration options
    * @param {bool} options.shouldScroll - whether or not we should scroll the
    *   page as part of this animation.
-   *   defualt: the value of options.shouldScroll passed into PageAnimation()
+   *   defualt: the value of options.shouldScroll passed into Pangea()
    * @param {bool} options.scrollTiming - the scroll timing for this animation
    *   options:
    *     'before': scroll the page before starting animations
    *     'during': scroll the page and start the animations at the same time
    *     'after': scroll once the animations are complete
-   *   default: the value of options.scrollTiming passed into PageAnimation()
+   *   default: the value of options.scrollTiming passed into Pangea()
    * @param {Number} options.scrollDuration - the scroll speed in ms.
-   *   default: the value of options.scrollDuration passed into PageAnimation()
+   *   default: the value of options.scrollDuration passed into Pangea()
    *
-   * @returns the new PageAnimation instance.
+   * @returns the new Pangea instance.
    */
-  PageAnimation.prototype.register = function(urlRegex, finalElementId, bodyClass, options) {
+  Pangea.prototype.register = function(urlRegex, finalElementId, bodyClass, options) {
     // Create the animation
     var opts = options || {};
     var animation = {
@@ -183,11 +183,11 @@
    * Deregisters the animation for the passed urlRegex
    *
    * @param {string} urlRegex - the same pattern that was passed into
-   *   PageAnimation.register()
+   *   Pangea.register()
    *
-   * @returns the PageAnimation instance.
+   * @returns the Pangea instance.
    */
-  PageAnimation.prototype.deregister = function(urlRegex) {
+  Pangea.prototype.deregister = function(urlRegex) {
     if (!this.animations[urlRegex]) {
       console.error('No animation registered with regex ' + urlRegex);
     }
@@ -199,20 +199,20 @@
   };
 
   /**
-   * Enable the PageAnimation library by beginning to listen to click events,
+   * Enable the Pangea library by beginning to listen to click events,
    * running animations appropriately.
    */
-  PageAnimation.prototype.enable = function() {
+  Pangea.prototype.enable = function() {
     for (var i = 0; i < this.links.length; i++) {
       this.links[i].addEventListener('click', this.boundOnClick);
     }
   };
 
   /**
-   * Disable the PageAnimation library by removing event listeners set in
-   * `PageAnimation.enable()`.
+   * Disable the Pangea library by removing event listeners set in
+   * `Pangea.enable()`.
    */
-  PageAnimation.prototype.disable = function() {
+  Pangea.prototype.disable = function() {
     for (var i = 0; i < this.links.length; i++) {
       this.links[i].removeEventListener('click', this.boundOnClick);
     }
@@ -225,7 +225,7 @@
    * @param {int} scrollDuration - how long the scroll should take, in ms
    * @param {function} cb - callback to call when the scroll is complete
    */
-  PageAnimation.scrollTo = function(offset, scrollDuration, cb) {
+  Pangea.scrollTo = function(offset, scrollDuration, cb) {
     cb = cb || function() {};
     var startT = Date.now();
     var startY = window.scrollY;
@@ -260,7 +260,7 @@
    *
    * @param {Object} e - the transition end event object.
    */
-  PageAnimation.prototype._onTransitionEnd = function(e) {
+  Pangea.prototype._onTransitionEnd = function(e) {
     if (!this.currentAnimation) {
       return;
     }
@@ -287,7 +287,7 @@
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'after') {
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, followLink);
+      Pangea.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, followLink);
     } else {
       followLink();
     }
@@ -308,7 +308,7 @@
    *   as part of this animation
    * @param {string} animation.scrollTiming - when to scroll the page
    */
-  PageAnimation.prototype._animate = function(animation) {
+  Pangea.prototype._animate = function(animation) {
     this.cb.beforeAnimationStart(animation);
     animation.finalElement.addEventListener(this.transitionEndEvent, this.boundOnTransitionEnd);
     this.currentAnimation = animation;
@@ -318,10 +318,10 @@
     }.bind(this);
 
     if (animation.shouldScroll && animation.scrollTiming === 'before') {
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, startAnimation);
+      Pangea.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration, startAnimation);
     } else if (animation.shouldScroll && animation.scrollTiming === 'during') {
       setTimeout(startAnimation, 0);
-      PageAnimation.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration);
+      Pangea.scrollTo(this.cb.computeScrollOffset(animation), animation.scrollDuration);
     } else {
       startAnimation();
     }
@@ -335,7 +335,7 @@
    *
    * @param {Object} e - the click event object.
    */
-  PageAnimation.prototype._onClick = function(e) {
+  Pangea.prototype._onClick = function(e) {
     var anchor = _getTargetAnchor(e);
     var path = _getAnchorPath(anchor);
 
@@ -358,11 +358,11 @@
   };
 
   if (typeof define === 'function' && define.amd) {
-    define(PageAnimation);
+    define(Pangea);
   } else if (typeof module !== 'undefined' && module.exports) {
-    module.exports = PageAnimation;
+    module.exports = Pangea;
   } else {
-    global.PageAnimation = PageAnimation;
+    global.Pangea = Pangea;
   }
 
 }(this));

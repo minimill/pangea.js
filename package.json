@@ -1,8 +1,8 @@
 {
-  "name": "pageanimation.js",
+  "name": "pangea.js",
   "version": "0.1.0",
   "description": "Choreograph elegant, performant exit animations on the web",
-  "repository": "https://github.com/minimill/pageanimation.js",
+  "repository": "https://github.com/minimill/pangea.js",
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-jscs": "^3.0.1",

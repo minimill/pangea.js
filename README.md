@@ -1,5 +1,5 @@
-pageanimation.js
-===========================
+pangea.js
+=========
 
 Choreograph elegant, performant exit animations on the web. This library is design from a "less is more" additude in regards to JavaScript code. Animations are expected to be implemented separately, using pure CSS transitions & animations.
 
@@ -12,8 +12,8 @@ Choreograph elegant, performant exit animations on the web. This library is desi
 #### Step 1: Write your markup
 
 ```html
-<!-- 1. Include the pageanimation.js library -->
-<script src="pageanimation.min.js"></script>
+<!-- 1. Include the pangea.js library -->
+<script src="pangea.min.js"></script>
 
 <!-- 2. Tag an element as being the last to animate, using any ID you see fit -->
 <h1>Test webpage</h1>
@@ -43,7 +43,7 @@ h1, p {
  * Example animation styles.
  * 
  * Here, we fade out text and fade the background to black when the
- * PageAnimation library gives the body the animating-to-about-page class.
+ * Pangea library gives the body the animating-to-about-page class.
  */
 body.animating-to-about-page {
     background-color: black;
@@ -63,7 +63,7 @@ body.animating-to-about-page p {
  * animating-to-about-page class.  When the element with ID last-to-animate
  * is done transitioning, we will navigate to the /about page.
  */
-var animation = new PageAnimation()
+var pangea = new Pangea()
     .register(/\/about/, 'last-to-animate', 'animating-to-about-page')
     .enable();
 ```
@@ -71,9 +71,9 @@ var animation = new PageAnimation()
 
 ## API
 
-### PageAnimation([_options_])
+### Pangea([_options_])
 
-The `PageAnimation`constructor will setup a new page animation manager instances. Returns a new instance of the `PageAnimation` class.
+The `Pangea`constructor will setup a new page animation manager instances. Returns a new instance of the `Pangea` class.
 
 You can customize the instance by passing the `options` parameter. The example below uses all options and their defaults:
 
@@ -87,7 +87,7 @@ var opts = {
   beforeAnimationStart: function() {},
   onTransitionEnd: function() {},
 };
-var pageAnimation = new PageAnimation(opts)
+var pangea = new Pangea(opts)
 ```
 
 ##### `options`
@@ -158,12 +158,12 @@ Register a new animation on this page.
 
 #### `options.shouldScroll`
 > **Type**: `bool`
-> **Defualt**: The value of `options.shouldScroll` passed into `PageAnimation()`.
+> **Defualt**: The value of `options.shouldScroll` passed into `Pangea()`.
 > **Description**: Whether or not we should scroll the page as part of this animation. 
 
 #### `options.scrollTiming`
 > **Type**: `bool`
-> **Default**: the value of `options.scrollTiming` passed into `PageAnimation()`.
+> **Default**: the value of `options.scrollTiming` passed into `Pangea()`.
 > **Description**: The scroll timing for this animation
 > **Options**:
 > 
@@ -172,18 +172,18 @@ Register a new animation on this page.
 > - `"after"`: scroll once the animations are complete
 
 ### deregister(_urlRegex_)
-Deregisters the animation for the passed `urlRegex`. Returns the PageAnimation instance.
+Deregisters the animation for the passed `urlRegex`. Returns the Pangea instance.
 
 #### `urlRegex`
 > **Type**: `string`
-> **Description** The same pattern that was passed into `PageAnimation.register()`.
+> **Description** The same pattern that was passed into `Pangea.register()`.
 
 ### enable()
 
-Enable the PageAnimation library by beginning to listen to click events, running animations appropriately.
+Enable the Pangea library by beginning to listen to click events, running animations appropriately.
 
 ### disable()
 
-Disable the PageAnimation library by removing event listeners set in `PageAnimation.enable()`.
+Disable the Pangea library by removing event listeners set in `Pangea.enable()`.
 
-[download]: https://github.com/minimill/pageanimation.js/releases/download/v0.1/pageanimation.min.js
+[download]: https://github.com/minimill/pangea.js/releases/download/v0.1/pangea.min.js
