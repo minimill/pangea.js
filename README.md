@@ -211,4 +211,4 @@ Enable the Pangea library by beginning to listen to click events, running animat
 
 Disable the Pangea library by removing event listeners set in `Pangea.enable()`.
 
-[download]: https://github.com/minimill/pangea.js/releases/download/v0.1/pangea.min.js
+[download]: https://github.com/minimill/pangea.js/releases/download/v0.2.0/pangea.min.js
