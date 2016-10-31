@@ -1,3 +1,5 @@
+![pangea.js logo](pangeajs-logo.png "pangea.js logo")
+
 pangea.js
 =========
 
