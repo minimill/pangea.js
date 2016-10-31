@@ -1,4 +1,4 @@
-![pangea.js logo](pangeajs-logo.png "pangea.js logo")
+![pangea.js logo](pangeajs-logo-github.png "pangea.js logo")
 
 pangea.js
 =========
